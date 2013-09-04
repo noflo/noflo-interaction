@@ -1,0 +1,30 @@
+{
+  "name": "noflo-interaction",
+  "description": "User interaction components for NoFlo",
+  "author": "Henri Bergius <henri.bergius@iki.fi>",
+  "repo": "noflo/noflo-interaction",
+  "version": "0.0.1",
+  "keywords": [
+  ],
+  "dependencies": {
+    "noflo/noflo": "*"
+  },
+  "scripts": [
+    "components/ListenDrag.coffee",
+    "components/ListenMouse.coffee",
+    "components/ListenScroll.coffee",
+    "components/ListenTouch.coffee",
+    "index.js"
+  ],
+  "json": [
+    "component.json"
+  ],
+  "noflo": {
+    "components": {
+      "ListenDrag": "components/ListenDrag.coffee",
+      "ListenMouse": "components/ListenMouse.coffee",
+      "ListenScroll": "components/ListenScroll.coffee",
+      "ListenTouch": "components/ListenTouch.coffee"
+    }
+  }
+}
