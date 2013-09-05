@@ -22,7 +22,7 @@ describe 'ListenScroll component', ->
 
   describe 'when started', ->
     it 'should send the new scroll coordinates', (done) ->
-      unless navigator.userAgent.indexOf('Phantom') is -1
+      unless window.navigator.userAgent.indexOf('Phantom') is -1
         # Scroll API doesn't seem to work in the PhantomJS test runner
         return done()
       if window.location.href is 'http://127.0.0.1:9999/spec/runner.html'
