@@ -24,3 +24,15 @@ describe 'ListenMouse component', ->
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
+    it 'should transmit a dblclick event on mouse dblclick', (done) ->
+      element.send el
+      dblclick = socket.createSocket()
+      c.outPorts.dblclick.attach dblclick
+      dblclick.once 'data', (data) ->
+        chai.expect(data).is.instanceof UIEvent
+        done()
+      evt = document.createEvent 'UIEvent'
+      evt.initUIEvent 'dblclick', true, true
+      evt.clientX = 5
+      evt.clientY = 10
+      el.dispatchEvent evt
