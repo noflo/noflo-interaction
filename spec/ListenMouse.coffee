@@ -20,7 +20,7 @@ describe 'ListenMouse component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'click', true, true
+      evt.initUIEvent 'click', true, true, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
@@ -32,7 +32,7 @@ describe 'ListenMouse component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'dblclick', true, true
+      evt.initUIEvent 'dblclick', true, true, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
