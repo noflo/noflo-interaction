@@ -29,7 +29,7 @@ describe 'ListenTouch component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'touchstart', true, true
+      evt.initUIEvent 'touchstart', true, true, window, 1
       evt.changedTouches = []
       evt.changedTouches.push
         pageX: 5
@@ -42,7 +42,7 @@ describe 'ListenTouch component', ->
         chai.expect(data).to.equal 5
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'touchmove', true, true
+      evt.initUIEvent 'touchmove', true, true, window, 1
       evt.changedTouches = []
       evt.changedTouches.push
         pageX: 5
@@ -55,7 +55,7 @@ describe 'ListenTouch component', ->
         chai.expect(data).to.equal 10
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'touchmove', true, true
+      evt.initUIEvent 'touchmove', true, true, window, 1
       evt.changedTouches = []
       evt.changedTouches.push
         pageX: 5
@@ -68,7 +68,7 @@ describe 'ListenTouch component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'touchend', true, true
+      evt.initUIEvent 'touchend', true, true, window, 1
       evt.changedTouches = []
       evt.changedTouches.push
         pageX: 5
