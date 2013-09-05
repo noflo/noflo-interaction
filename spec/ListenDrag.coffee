@@ -29,7 +29,7 @@ describe 'ListenDrag component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'dragstart', true, true, 1
+      evt.initUIEvent 'dragstart', true, true, window, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
@@ -40,7 +40,7 @@ describe 'ListenDrag component', ->
         chai.expect(data).to.equal 5
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'drag', true, true, 1
+      evt.initUIEvent 'drag', true, true, window, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
@@ -51,7 +51,7 @@ describe 'ListenDrag component', ->
         chai.expect(data).to.equal 10
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'drag', true, true, 1
+      evt.initUIEvent 'drag', true, true, window, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
@@ -62,7 +62,7 @@ describe 'ListenDrag component', ->
         chai.expect(data).is.instanceof UIEvent
         done()
       evt = document.createEvent 'UIEvent'
-      evt.initUIEvent 'dragend', true, true, 1
+      evt.initUIEvent 'dragend', true, true, window, 1
       evt.clientX = 5
       evt.clientY = 10
       el.dispatchEvent evt
