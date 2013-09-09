@@ -13,7 +13,7 @@ class ListenKeyboard extends noflo.Component
   subscribe: (element) ->
     element.addEventListener 'keypress', @keypress, false
 
-  click: (event) =>
+  keypress: (event) =>
     return unless @outPorts.keypress.isAttached()
     event.preventDefault()
     event.stopPropagation()
