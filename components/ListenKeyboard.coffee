@@ -18,7 +18,7 @@ class ListenKeyboard extends noflo.Component
     event.preventDefault()
     event.stopPropagation()
 
-    @outPorts.keypress.send event
+    @outPorts.keypress.send event.keyCode
     @outPorts.keypress.disconnect()
 
 exports.getComponent = -> new ListenKeyboard
