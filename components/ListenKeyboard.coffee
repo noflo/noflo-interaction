@@ -15,8 +15,6 @@ class ListenKeyboard extends noflo.Component
 
   keypress: (event) =>
     return unless @outPorts.keypress.isAttached()
-    event.preventDefault()
-    event.stopPropagation()
 
     @outPorts.keypress.send event.keyCode
     @outPorts.keypress.disconnect()
