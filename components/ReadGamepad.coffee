@@ -1,4 +1,4 @@
-noflow = require 'noflo'
+noflo = require 'noflo'
 
 class ReadGamepad extends noflo.Component
   description: "read the state of a gamepad"
