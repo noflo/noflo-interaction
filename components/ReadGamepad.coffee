@@ -7,8 +7,8 @@ class ReadGamepad extends noflo.Component
     @inPorts =
       gamepad: new noflo.Port 'integer'
     @outPorts =
-      out: new noflow.Port 'object'
-      error: new noflow.Port 'string'
+      out: new noflo.Port 'object'
+      error: new noflo.Port 'string'
 
     @inPorts.gamepad.on 'data', (number) =>
       @readGamepad number
