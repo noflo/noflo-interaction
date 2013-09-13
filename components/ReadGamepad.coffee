@@ -13,28 +13,28 @@ class ReadGamepad extends noflo.Component
     @inPorts.gamepad.on 'data', (number) =>
       @readGamepad number
 
-    readGamepad: (number) ->
-      if !navigator.webkitGetGamepads
-        msg = "no webkit gamepad api available"
-        if @outPorts.error.isAttached()
-          @outPorts.error.send msg
-          @outPorts.error.disconnect()
-          return
-        else
-          throw new Error msg
+  readGamepad: (number) ->
+    if !navigator.webkitGetGamepads
+      msg = "no webkit gamepad api available"
+      if @outPorts.error.isAttached()
+        @outPorts.error.send msg
+        @outPorts.error.disconnect()
+        return
+      else
+        throw new Error msg
 
-      gamepadState = navigator.webkitGetGamepads()[number]
-      if !gamepadState
-        msg = "state for gamepad '{@gamepad}' could not been read"
-        if @outPorts.error.isAttached()
-          @outPorts.error.send msg
-          @outPorts.error.disconnect()
-          return
-        else
-          throw new Error msg
+    gamepadState = navigator.webkitGetGamepads()[number]
+    if !gamepadState
+      msg = "state for gamepad '{@gamepad}' could not been read"
+      if @outPorts.error.isAttached()
+        @outPorts.error.send msg
+        @outPorts.error.disconnect()
+        return
+      else
+        throw new Error msg
 
-      if @lastTimestamp != gamepadState.timestamp
-        @lastTimestamp = gamepadState.timestamp
-        @outPorts.out.send gamepadState
+    if @lastTimestamp != gamepadState.timestamp
+      @lastTimestamp = gamepadState.timestamp
+      @outPorts.out.send gamepadState
 
 exports.getComponent = -> new ReadGamepad
