@@ -15,6 +15,7 @@
     "components/ListenMouse.coffee",
     "components/ListenScroll.coffee",
     "components/ListenTouch.coffee",
+    "components/ReadGamepad.coffee",
     "index.js"
   ],
   "json": [
@@ -26,7 +27,8 @@
       "ListenKeyboard": "components/ListenKeyboard.coffee",
       "ListenMouse": "components/ListenMouse.coffee",
       "ListenScroll": "components/ListenScroll.coffee",
-      "ListenTouch": "components/ListenTouch.coffee"
+      "ListenTouch": "components/ListenTouch.coffee",
+      "ReadGamepad": "components/ReadGamepad.coffee"
     }
   }
 }
