@@ -25,7 +25,7 @@ class ReadGamepad extends noflo.Component
 
     gamepadState = navigator.webkitGetGamepads()[number]
     if !gamepadState
-      msg = "state for gamepad '{@gamepad}' could not been read"
+      msg = "state for gamepad '#{number}' could not been read"
       if @outPorts.error.isAttached()
         @outPorts.error.send msg
         @outPorts.error.disconnect()
