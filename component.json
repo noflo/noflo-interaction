@@ -11,6 +11,7 @@
   },
   "scripts": [
     "components/ListenDrag.coffee",
+    "components/ListenHash.coffee",
     "components/ListenKeyboard.coffee",
     "components/ListenMouse.coffee",
     "components/ListenScroll.coffee",
@@ -23,6 +24,7 @@
   "noflo": {
     "components": {
       "ListenDrag": "components/ListenDrag.coffee",
+      "ListenHash": "components/ListenHash.coffee",
       "ListenKeyboard": "components/ListenKeyboard.coffee",
       "ListenMouse": "components/ListenMouse.coffee",
       "ListenScroll": "components/ListenScroll.coffee",
