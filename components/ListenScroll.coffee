@@ -4,7 +4,8 @@ class ListenScroll extends noflo.Component
   description: 'Listen to scroll events'
   constructor: ->
     @inPorts =
-      start: new noflo.Port
+      start: new noflo.Port 'bang'
+      stop: new noflo.Port 'bang'
     @outPorts =
       top: new noflo.Port 'number'
       bottom: new noflo.Port 'number'
@@ -14,8 +15,14 @@ class ListenScroll extends noflo.Component
     @inPorts.start.on 'data', =>
       @subscribe()
 
+    @inPorts.stop.on 'data', =>
+      @unsubscribe()
+
   subscribe: ->
     window.addEventListener 'scroll', @scroll, false
+
+  unsubscribe: ->
+    window.removeEventListenr 'scroll', @scroll, false
 
   scroll: (event) =>
     top = window.scrollY
@@ -34,5 +41,8 @@ class ListenScroll extends noflo.Component
       right = left + window.innerWidth
       @outPorts.right.send right
       @outPorts.right.disconnect()
+
+  shutdown: ->
+    @unsubscribe()
 
 exports.getComponent = -> new ListenScroll
