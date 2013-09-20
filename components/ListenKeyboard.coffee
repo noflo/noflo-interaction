@@ -2,23 +2,28 @@ noflo = require 'noflo'
 
 class ListenKeyboard extends noflo.Component
   constructor: ->
+    @elements = []
     @inPorts =
       element: new noflo.Port 'object'
-      stop: new noflo.Port 'bang'
+      stop: new noflo.Port 'object'
     @outPorts =
       keypress: new noflo.Port 'integer'
 
     @inPorts.element.on 'data', (element) =>
       @subscribe element
 
-    @inPorts.stop.on 'data', =>
-      @unsubscribe()
+    @inPorts.stop.on 'data', (element) =>
+      @unsubscribe element
 
   subscribe: (element) ->
     element.addEventListener 'keypress', @keypress, false
+    @elements.push element
 
   unsubscribe: (element) ->
+    if -1 is @elements.indexOf element
+      return
     element.removeEventListener 'keypress', @keypress, false
+    @elements.splice @elements.indexOf(element), 1
 
   keypress: (event) =>
     return unless @outPorts.keypress.isAttached()
@@ -27,6 +32,7 @@ class ListenKeyboard extends noflo.Component
     @outPorts.keypress.disconnect()
 
   shutdown: ->
-    @unsubscribe()
+    for element in @elements
+      @unsubscribe element
 
 exports.getComponent = -> new ListenKeyboard
