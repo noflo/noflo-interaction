@@ -31,4 +31,4 @@ class ListenHash extends noflo.Component
   shutdown: ->
     @unsubscribe()
 
-exports.getComponent => new ListenHash
+exports.getComponent = -> new ListenHash
