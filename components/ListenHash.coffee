@@ -18,7 +18,7 @@ class ListenHash extends noflo.Component
   subscribe: ->
     window.addEventListener 'hashchange', @hashChange, false
 
-    if window.location.hash and @outPorts.initial.isAttached()
+    if @outPorts.initial.isAttached()
       @outPorts.initial.send window.location.hash.substr 1
       @outPorts.initial.disconnect()
 
@@ -30,7 +30,7 @@ class ListenHash extends noflo.Component
     oldHash = event.oldURL.split('#')[1]
     newHash = event.newURL.split('#')[1]
     @outPorts.change.beginGroup oldHash if oldHash
-    @outPorts.change.send newHash
+    @outPorts.change.send newHash+''
     @outPorts.change.endGroup oldHash if oldHash
 
   shutdown: ->
