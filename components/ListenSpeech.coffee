@@ -21,7 +21,8 @@ class ListenSpeech extends noflo.Component
       @handleError new Error 'Speech recognition support not available'
     @recognition = new window.webkitSpeechRecognition
     @recognition.continuous = true
-    @recognition.start
+    @recognition.start()
+    @outPorts.result.connect()
     @recognition.onresult = @handleResult
     @recognition.onerror = @handleError
 
@@ -31,6 +32,7 @@ class ListenSpeech extends noflo.Component
       if @sent.indexOf(idx) isnt -1
         continue
       @outPorts.result.send result[0].transcript
+      @sent.push idx
 
   handleError: (error) =>
     if @outPorts.error.isAttached()
