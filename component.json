@@ -15,6 +15,7 @@
     "components/ListenKeyboard.coffee",
     "components/ListenMouse.coffee",
     "components/ListenScroll.coffee",
+    "components/ListenSpeech.coffee",
     "components/ListenTouch.coffee",
     "components/SetHash.coffee",
     "index.js"
@@ -29,6 +30,7 @@
       "ListenKeyboard": "components/ListenKeyboard.coffee",
       "ListenMouse": "components/ListenMouse.coffee",
       "ListenScroll": "components/ListenScroll.coffee",
+      "ListenSpeech": "components/ListenSpeech.coffee",
       "ListenTouch": "components/ListenTouch.coffee",
       "SetHash": "components/SetHash.coffee"
     }
