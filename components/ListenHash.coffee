@@ -1,6 +1,7 @@
 noflo = require 'noflo'
 
 class ListenHash extends noflo.Component
+  description: 'Listen for hash changes in browser\'s URL bar'
   constructor: ->
     @inPorts =
       start: new noflo.Port 'bang'

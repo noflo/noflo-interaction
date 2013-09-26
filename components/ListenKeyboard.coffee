@@ -1,6 +1,7 @@
 noflo = require 'noflo'
 
 class ListenKeyboard extends noflo.Component
+  description: 'Listen for key presses on a given DOM element'
   constructor: ->
     @elements = []
     @inPorts =

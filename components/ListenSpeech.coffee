@@ -1,6 +1,7 @@
 noflo = require 'noflo'
 
 class ListenSpeech extends noflo.Component
+  description: 'Listen for user\'s microphone and recognize phrases'
   constructor: ->
     @recognition = false
     @sent = []

@@ -1,7 +1,7 @@
 noflo = require 'noflo'
 
 class ListenScroll extends noflo.Component
-  description: 'Listen to scroll events'
+  description: 'Listen to scroll events on the browser window'
   constructor: ->
     @inPorts =
       start: new noflo.Port 'bang'
