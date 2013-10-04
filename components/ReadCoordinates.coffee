@@ -18,6 +18,7 @@ class ReadCoordinates extends noflo.Component
       @outPorts.page.disconnect() if @outPorts.page.isAttached()
 
   read: (event) ->
+    return unless event
     if @outPorts.screen.isAttached() and event.screenX isnt undefined
       @outPorts.screen.send
         x: event.screenX
