@@ -54,10 +54,10 @@ class ListenPointer extends noflo.Component
     element.removeEventListener 'pointerout', @pointerOut, @capture
     element.removeEventListener 'pointerenter', @pointerEnter, @capture
     element.removeEventListener 'pointerup', @pointerUp, @capture
-    @elements.splice @elements.indexOf(element), 1
 
   shutdown: ->
     @unsubscribe element for element in @elements
+    @elements = []
 
   pointerDown: (event) =>
     @handle event, 'down'
