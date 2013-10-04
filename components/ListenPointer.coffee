@@ -4,13 +4,13 @@ class ListenPointer extends noflo.Component
   description: 'Listen to pointer events on a DOM element'
   constructor: ->
     @action = 'none'
-    @stopPropagation = false
+    @propagate = true
     @elements = []
 
     @inPorts =
       element: new noflo.Port 'object'
       action: new noflo.Port 'string'
-      stoppropagation: new noflo.Port 'boolean'
+      propagate: new noflo.Port 'boolean'
     @outPorts =
       down: new noflo.Port 'object'
       up: new noflo.Port 'object'
@@ -25,7 +25,7 @@ class ListenPointer extends noflo.Component
       @subscribe element
 
     @inPorts.action.on 'data', (@action) =>
-    @inPorts.stoppropagation.on 'data', (@stopPropagation) =>
+    @inPorts.propagate.on 'data', (@propagate) =>
 
   subscribe: (element) ->
     element.setAttribute 'touch-action', @action
@@ -57,25 +57,25 @@ class ListenPointer extends noflo.Component
     @unsubscribe element for element in @elements
 
   pointerDown: (event) =>
-    @handle event 'down'
+    @handle event, 'down'
   pointerUp: (event) =>
-    @handle event 'up'
+    @handle event, 'up'
   pointerCancel: (event) =>
-    @handle event 'cancel'
+    @handle event, 'cancel'
   pointerMove: (event) =>
-    @handle event 'move'
+    @handle event, 'move'
   pointerOver: (event) =>
-    @handle event 'over'
+    @handle event, 'over'
   pointerOut: (event) =>
-    @handle event 'out'
+    @handle event, 'out'
   pointerEnter: (event) =>
-    @handle event 'enter'
+    @handle event, 'enter'
   pointerLeave: (event) =>
-    @handle event 'leave'
+    @handle event, 'leave'
 
   handle: (event, type) ->
     event.preventDefault()
-    event.stopPropagation() if @stopPropagation
+    event.stopPropagation() unless @propagate
 
     unless @outPorts[type].isAttached()
       return
