@@ -4,12 +4,14 @@ class ListenPointer extends noflo.Component
   description: 'Listen to pointer events on a DOM element'
   constructor: ->
     @action = 'none'
-    @propagate = true
+    @capture = false
+    @propagate = false
     @elements = []
 
     @inPorts =
       element: new noflo.Port 'object'
       action: new noflo.Port 'string'
+      capture: new noflo.Port 'boolean'
       propagate: new noflo.Port 'boolean'
     @outPorts =
       down: new noflo.Port 'object'
@@ -25,32 +27,33 @@ class ListenPointer extends noflo.Component
       @subscribe element
 
     @inPorts.action.on 'data', (@action) =>
+    @inPorts.capture.on 'data', (@capture) =>
     @inPorts.propagate.on 'data', (@propagate) =>
 
   subscribe: (element) ->
     element.setAttribute 'touch-action', @action
 
-    element.addEventListener 'pointerdown', @pointerDown, false
-    element.addEventListener 'pointerup', @pointerUp, false
-    element.addEventListener 'pointercancel', @pointerCancel, false
-    element.addEventListener 'pointermove', @pointerMove, false
-    element.addEventListener 'pointerover', @pointerOver, false
-    element.addEventListener 'pointerout', @pointerOut, false
-    element.addEventListener 'pointerenter', @pointerEnter, false
-    element.addEventListener 'pointerup', @pointerUp, false
+    element.addEventListener 'pointerdown', @pointerDown, @capture
+    element.addEventListener 'pointerup', @pointerUp, @capture
+    element.addEventListener 'pointercancel', @pointerCancel, @capture
+    element.addEventListener 'pointermove', @pointerMove, @capture
+    element.addEventListener 'pointerover', @pointerOver, @capture
+    element.addEventListener 'pointerout', @pointerOut, @capture
+    element.addEventListener 'pointerenter', @pointerEnter, @capture
+    element.addEventListener 'pointerup', @pointerUp, @capture
     @elements.push element
 
   unsubscribe: (element) ->
     element.removeAttribute 'touch-action'
 
-    element.removeEventListener 'pointerdown', @pointerDown, false
-    element.removeEventListener 'pointerup', @pointerUp, false
-    element.removeEventListener 'pointercancel', @pointerCancel, false
-    element.removeEventListener 'pointermove', @pointerMove, false
-    element.removeEventListener 'pointerover', @pointerOver, false
-    element.removeEventListener 'pointerout', @pointerOut, false
-    element.removeEventListener 'pointerenter', @pointerEnter, false
-    element.removeEventListener 'pointerup', @pointerUp, false
+    element.removeEventListener 'pointerdown', @pointerDown, @capture
+    element.removeEventListener 'pointerup', @pointerUp, @capture
+    element.removeEventListener 'pointercancel', @pointerCancel, @capture
+    element.removeEventListener 'pointermove', @pointerMove, @capture
+    element.removeEventListener 'pointerover', @pointerOver, @capture
+    element.removeEventListener 'pointerout', @pointerOut, @capture
+    element.removeEventListener 'pointerenter', @pointerEnter, @capture
+    element.removeEventListener 'pointerup', @pointerUp, @capture
     @elements.splice @elements.indexOf(element), 1
 
   shutdown: ->
