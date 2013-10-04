@@ -19,6 +19,7 @@
     "components/ListenSpeech.coffee",
     "components/ListenTouch.coffee",
     "components/SetHash.coffee",
+    "components/ReadCoordinates.coffee",
     "index.js"
   ],
   "json": [
@@ -34,6 +35,7 @@
       "ListenScroll": "components/ListenScroll.coffee",
       "ListenSpeech": "components/ListenSpeech.coffee",
       "ListenTouch": "components/ListenTouch.coffee",
+      "ReadCoordinates": "components/ReadCoordinates.coffee",
       "SetHash": "components/SetHash.coffee"
     }
   }
