@@ -10,9 +10,9 @@ class ReadCoordinates extends noflo.Component
       client: new noflo.Port 'object'
       page: new noflo.Port 'object'
 
-    @inPorts.in.on 'data', (data) =>
+    @inPorts.event.on 'data', (data) =>
       @read data
-    @inPorts.in.on 'disconnect', =>
+    @inPorts.event.on 'disconnect', =>
       @outPorts.screen.disconnect() if @outPorts.screen.isAttached()
       @outPorts.client.disconnect() if @outPorts.client.isAttached()
       @outPorts.page.disconnect() if @outPorts.page.isAttached()
