@@ -87,7 +87,7 @@ class ListenPointer extends noflo.Component
     @outPorts[type].endGroup()
 
     # End of interaction, send EOTs
-    if type is 'cancel' or type is 'leave'
+    if type is 'cancel' or type is 'leave' or type is 'out'
       for name, port of @outPorts
         continue unless port.isAttached()
         port.disconnect()
