@@ -10,8 +10,16 @@ class ReadCoordinates extends noflo.Component
       client: new noflo.Port 'object'
       page: new noflo.Port 'object'
 
+    @inPorts.event.on 'begingroup', (group) =>
+      @outPorts.screen.beginGroup group if @outPorts.screen.isAttached()
+      @outPorts.client.beginGroup group if @outPorts.client.isAttached()
+      @outPorts.page.beginGroup group if @outPorts.page.isAttached()
     @inPorts.event.on 'data', (data) =>
       @read data
+    @inPorts.event.on 'endgroup', =>
+      @outPorts.screen.endGroup() if @outPorts.screen.isAttached()
+      @outPorts.client.endGroup() if @outPorts.client.isAttached()
+      @outPorts.page.endGroup() if @outPorts.page.isAttached()
     @inPorts.event.on 'disconnect', =>
       @outPorts.screen.disconnect() if @outPorts.screen.isAttached()
       @outPorts.client.disconnect() if @outPorts.client.isAttached()
