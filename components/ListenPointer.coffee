@@ -55,6 +55,10 @@ class ListenPointer extends noflo.Component
     element.removeEventListener 'pointerenter', @pointerEnter, @capture
     element.removeEventListener 'pointerup', @pointerUp, @capture
 
+    for name, port of @outPorts
+      continue unless port.isAttached()
+      port.disconnect()
+
   shutdown: ->
     @unsubscribe element for element in @elements
     @elements = []
@@ -87,7 +91,7 @@ class ListenPointer extends noflo.Component
     @outPorts[type].endGroup()
 
     # End of interaction, send EOTs
-    if type is 'cancel' or type is 'leave' or type is 'out'
+    if type is 'up' or type is 'cancel' or type is 'leave'
       for name, port of @outPorts
         continue unless port.isAttached()
         port.disconnect()
