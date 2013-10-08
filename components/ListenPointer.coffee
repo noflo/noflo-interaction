@@ -40,7 +40,7 @@ class ListenPointer extends noflo.Component
     element.addEventListener 'pointerover', @pointerOver, @capture
     element.addEventListener 'pointerout', @pointerOut, @capture
     element.addEventListener 'pointerenter', @pointerEnter, @capture
-    element.addEventListener 'pointerup', @pointerUp, @capture
+    element.addEventListener 'pointerleave', @pointerLeave, @capture
     @elements.push element
 
   unsubscribe: (element) ->
@@ -53,7 +53,7 @@ class ListenPointer extends noflo.Component
     element.removeEventListener 'pointerover', @pointerOver, @capture
     element.removeEventListener 'pointerout', @pointerOut, @capture
     element.removeEventListener 'pointerenter', @pointerEnter, @capture
-    element.removeEventListener 'pointerup', @pointerUp, @capture
+    element.removeEventListener 'pointerleave', @pointerLeave, @capture
 
     for name, port of @outPorts
       continue unless port.isAttached()
