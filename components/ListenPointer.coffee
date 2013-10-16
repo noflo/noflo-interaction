@@ -31,7 +31,8 @@ class ListenPointer extends noflo.Component
     @inPorts.propagate.on 'data', (@propagate) =>
 
   subscribe: (element) ->
-    element.setAttribute 'touch-action', @action
+    if element.setAttribute
+      element.setAttribute 'touch-action', @action
 
     element.addEventListener 'pointerdown', @pointerDown, @capture
     element.addEventListener 'pointerup', @pointerUp, @capture
@@ -44,7 +45,8 @@ class ListenPointer extends noflo.Component
     @elements.push element
 
   unsubscribe: (element) ->
-    element.removeAttribute 'touch-action'
+    if element.removeAttribute
+      element.removeAttribute 'touch-action'
 
     element.removeEventListener 'pointerdown', @pointerDown, @capture
     element.removeEventListener 'pointerup', @pointerUp, @capture
