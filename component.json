@@ -4,12 +4,12 @@
   "author": "Henri Bergius <henri.bergius@iki.fi>",
   "repo": "noflo/noflo-interaction",
   "version": "0.0.1",
-  "keywords": [
-  ],
+  "keywords": [],
   "dependencies": {
     "noflo/noflo": "*"
   },
   "scripts": [
+    "components/ListenChange.coffee",
     "components/ListenDrag.coffee",
     "components/ListenHash.coffee",
     "components/ListenKeyboard.coffee",
@@ -28,6 +28,7 @@
   "noflo": {
     "icon": "user",
     "components": {
+      "ListenChange": "components/ListenChange.coffee",
       "ListenDrag": "components/ListenDrag.coffee",
       "ListenHash": "components/ListenHash.coffee",
       "ListenKeyboard": "components/ListenKeyboard.coffee",
