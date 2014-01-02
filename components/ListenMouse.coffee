@@ -23,6 +23,7 @@ class ListenMouse extends noflo.Component
 
     @outPorts.click.send event
     @outPorts.click.disconnect()
+    do @updateIcon
 
   dblclick: (event) =>
     return unless @outPorts.dblclick.sockets.length
@@ -31,5 +32,16 @@ class ListenMouse extends noflo.Component
 
     @outPorts.dblclick.send event
     @outPorts.dblclick.disconnect()
+    do @updateIcon
+
+  updateIcon: ->
+    return unless @setIcon
+    return if @timeout
+    @originalIcon = @getIcon()
+    @setIcon 'exclamation-circle'
+    @timeout = setTimeout =>
+      @setIcon @originalIcon
+      @timeout = null
+    , 200
 
 exports.getComponent = -> new ListenMouse
