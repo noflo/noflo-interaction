@@ -9,31 +9,28 @@ class ListenResize extends noflo.Component
       start: new noflo.Port 'bang'
       stop: new noflo.Port 'bang'
     @outPorts =
-      initial: new noflo.Port 'object'
-      resize: new noflo.Port 'object'
+      width: new noflo.Port 'number'
+      height: new noflo.Port 'number'
 
     @inPorts.start.on 'data', =>
-      if @outPorts.initial.isAttached()
-        @outPorts.initial.send
-          width: window.innerWidth
-          height: window.innerHeight
-        @outPorts.initial.disconnect()
+      @sendSize()
       @subscribe()
 
     @inPorts.stop.on 'data', =>
       @unsubscribe()
 
   subscribe: ->
-    window.addEventListener 'resize', @resize, false
+    window.addEventListener 'resize', @sendSize, false
   unsubscribe: ->
-    window.removeEventListener 'resize', @resize, false
+    window.removeEventListener 'resize', @sendSize, false
 
-  resize: =>
-    return unless @outPorts.resize.isAttached()
-    @outPorts.resize.send
-      width: window.innerWidth
-      height: window.innerHeight
-    @outPorts.resize.disconnect()
+  sendSize: =>
+    if @outPorts.width.isAttached()
+      @outPorts.width.send window.innerWidth
+      @outPorts.width.disconnect()
+    if @outPorts.height.isAttached()
+      @outPorts.height.send window.innerHeight
+      @outPorts.height.disconnect()
 
   shutdown: ->
     @unsubscribe()
