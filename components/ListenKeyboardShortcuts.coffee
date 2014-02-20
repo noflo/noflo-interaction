@@ -65,6 +65,8 @@ class ListenKeyboardShortcuts extends noflo.Component
         @outPorts.missed.disconnect()
       return
 
+    event.preventDefault()
+    event.stopPropagation()
     @outPorts.shortcut.send event.keyCode, route
     @outPorts.shortcut.disconnect()
 
