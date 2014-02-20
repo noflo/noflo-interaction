@@ -25,10 +25,10 @@ class ListenKeyboardShortcuts extends noflo.Component
       do @unsubscribe
 
   subscribe: ->
-    document.addEventListener 'keypress', @keypress, false
+    document.addEventListener 'keydown', @keypress, false
 
   unsubscribe: ->
-    document.removeEventListener 'keypress', @keypress, false
+    document.removeEventListener 'keydown', @keypress, false
 
   normalizeKeys: (data) ->
     keys = data.split ','
@@ -51,7 +51,7 @@ class ListenKeyboardShortcuts extends noflo.Component
     return true unless @ignoreInput
     return false if event.target.tagName is 'TEXTAREA'
     return false if event.target.tagName is 'INPUT'
-    return false if event.target.contentEditable
+    return false if String(event.target.contentEditable) is 'true'
     true
 
   keypress: (event) =>
