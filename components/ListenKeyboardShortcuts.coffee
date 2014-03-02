@@ -44,6 +44,7 @@ class ListenKeyboardShortcuts extends noflo.Component
         when 'c' then keys[index] = 67
         when 'v' then keys[index] = 86
         when 'z' then keys[index] = 90
+        when 'r' then keys[index] = 82
         when 's' then keys[index] = 83
     keys
 
