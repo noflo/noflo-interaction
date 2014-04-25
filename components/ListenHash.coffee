@@ -3,6 +3,7 @@ noflo = require 'noflo'
 class ListenHash extends noflo.Component
   description: 'Listen for hash changes in browser\'s URL bar'
   constructor: ->
+    @current = null
     @inPorts =
       start: new noflo.Port 'bang'
       stop: new noflo.Port 'bang'
@@ -17,11 +18,11 @@ class ListenHash extends noflo.Component
       @unsubscribe()
 
   subscribe: ->
+    @current = @getHash()
     window.addEventListener 'hashchange', @hashChange, false
 
     if @outPorts.initial.isAttached()
-      initialHash = window.location.hash.substr 1
-      @outPorts.initial.send initialHash
+      @outPorts.initial.send @current
       @outPorts.initial.disconnect()
 
   unsubscribe: ->
@@ -29,12 +30,13 @@ class ListenHash extends noflo.Component
     @outPorts.change.disconnect()
 
   hashChange: (event) =>
-    oldHash = event.oldURL.split('#')[1]
-    newHash = event.newURL.split('#')[1]
-    newHash = '' unless newHash
+    oldHash = @current
+    @current = @getHash()
     @outPorts.change.beginGroup oldHash if oldHash
-    @outPorts.change.send newHash
+    @outPorts.change.send @current
     @outPorts.change.endGroup oldHash if oldHash
+
+  getHash: -> window.location.hash.substr(1) or ''
 
   shutdown: ->
     @unsubscribe()
