@@ -22,7 +22,8 @@
     "components/ListenTouch.coffee",
     "components/SetHash.coffee",
     "components/ReadCoordinates.coffee",
-    "index.js"
+    "index.js",
+    "components/ReadGamepad.coffee"
   ],
   "json": [
     "component.json"
@@ -42,6 +43,7 @@
       "ListenSpeech": "components/ListenSpeech.coffee",
       "ListenTouch": "components/ListenTouch.coffee",
       "ReadCoordinates": "components/ReadCoordinates.coffee",
+      "ReadGamepad": "components/ReadGamepad.coffee",
       "SetHash": "components/SetHash.coffee"
     }
   }
