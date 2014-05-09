@@ -12,7 +12,7 @@ class ListenKeyboardShortcuts extends noflo.Component
       stop: new noflo.Port 'bang'
     @outPorts =
       shortcut: new noflo.ArrayPort 'bang'
-      missed: new noflo.Port 'integer'
+      missed: new noflo.Port 'int'
 
     @inPorts.keys.on 'data', (data) =>
       @keys = @normalizeKeys data

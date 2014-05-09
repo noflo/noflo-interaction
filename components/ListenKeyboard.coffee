@@ -9,7 +9,7 @@ class ListenKeyboard extends noflo.Component
       element: new noflo.Port 'object'
       stop: new noflo.Port 'object'
     @outPorts =
-      keypress: new noflo.Port 'integer'
+      keypress: new noflo.Port 'int'
 
     @inPorts.element.on 'data', (element) =>
       @subscribe element
