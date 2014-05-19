@@ -2,6 +2,7 @@ noflo = require 'noflo'
 
 class ListenDrag extends noflo.Component
   description: 'Listen to drag events on a DOM element'
+  icon: 'arrows'
   constructor: ->
     @inPorts =
       element: new noflo.Port 'object'

@@ -2,6 +2,7 @@ noflo = require 'noflo'
 
 class ListenTouch extends noflo.Component
   description: 'Listen to touch events on a DOM element'
+  icon: 'hand-o-up'
   constructor: ->
     @inPorts =
       element: new noflo.Port 'object'
