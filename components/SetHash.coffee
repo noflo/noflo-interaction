@@ -1,6 +1,8 @@
 noflo = require 'noflo'
 
 class SetHash extends noflo.Component
+  description: 'Set the hash in browser\'s URL bar'
+  icon: 'slack'
   constructor: ->
     @inPorts =
       hash: new noflo.ArrayPort 'string'
