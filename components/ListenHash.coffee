@@ -5,12 +5,20 @@ class ListenHash extends noflo.Component
   icon: 'slack'
   constructor: ->
     @current = null
-    @inPorts =
-      start: new noflo.Port 'bang'
-      stop: new noflo.Port 'bang'
-    @outPorts =
-      initial: new noflo.Port 'string'
-      change: new noflo.Port 'string'
+    @inPorts = new noflo.InPorts
+      start:
+        datatype: 'bang'
+        description: 'Start listening for hash changes'
+      stop:
+        datatype: 'bang'
+        description: 'Stop listening for hash changes'
+    @outPorts = new noflo.OutPorts
+      initial:
+        datatype: 'string'
+        required: false
+      change:
+        datatype: 'string'
+        required: false
 
     @inPorts.start.on 'data', =>
       @subscribe()
@@ -21,10 +29,8 @@ class ListenHash extends noflo.Component
   subscribe: ->
     @current = @getHash()
     window.addEventListener 'hashchange', @hashChange, false
-
-    if @outPorts.initial.isAttached()
-      @outPorts.initial.send @current
-      @outPorts.initial.disconnect()
+    @outPorts.initial.send @current
+    @outPorts.initial.disconnect()
 
   unsubscribe: ->
     window.removeEventListener 'hashchange', @hashChange, false
