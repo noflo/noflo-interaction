@@ -43,7 +43,8 @@ class ListenHash extends noflo.Component
     @outPorts.change.send @current
     @outPorts.change.endGroup oldHash if oldHash
 
-  getHash: -> window.location.hash.substr(1) or ''
+  getHash: ->
+    window.location.href.split('#')[1] or ''
 
   shutdown: ->
     @unsubscribe()
