@@ -4,6 +4,7 @@ class ListenTouch extends noflo.Component
   description: 'Listen to touch events on a DOM element'
   icon: 'hand-o-up'
   constructor: ->
+    @elements = []
     @inPorts =
       element: new noflo.Port 'object'
     @outPorts =
@@ -19,6 +20,14 @@ class ListenTouch extends noflo.Component
     element.addEventListener 'touchstart', @touchstart, false
     element.addEventListener 'touchmove', @touchmove, false
     element.addEventListener 'touchend', @touchend, false
+    @elements.push element
+
+  unsubscribe: ->
+    for element in @elements
+      element.removeEventListener 'touchstart', @touchstart, false
+      element.removeEventListener 'touchmove', @touchmove, false
+      element.removeEventListener 'touchend', @touchend, false
+    @elements = []
 
   touchstart: (event) =>
     event.preventDefault()
@@ -65,5 +74,8 @@ class ListenTouch extends noflo.Component
       @outPorts.end.endGroup()
 
     @outPorts.end.disconnect()
+
+  shutdown: ->
+    @unsubscribe()
 
 exports.getComponent = -> new ListenTouch

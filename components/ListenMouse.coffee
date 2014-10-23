@@ -3,6 +3,7 @@ noflo = require 'noflo'
 class ListenMouse extends noflo.Component
   description: 'Listen to mouse events on a DOM element'
   constructor: ->
+    @elements = []
     @inPorts =
       element: new noflo.Port 'object'
     @outPorts =
@@ -15,6 +16,13 @@ class ListenMouse extends noflo.Component
   subscribe: (element) ->
     element.addEventListener 'click', @click, false
     element.addEventListener 'dblclick', @dblclick, false
+    @elements.push element
+
+  unsubscribe: ->
+    for element in @elements
+      element.removeEventListener 'click', @click, false
+      element.removeEventListener 'dblclick', @dblclick, false
+    @elements = []
 
   click: (event) =>
     return unless @outPorts.click.sockets.length
@@ -43,5 +51,8 @@ class ListenMouse extends noflo.Component
       @setIcon @originalIcon
       @timeout = null
     , 200
+
+  shutdown: ->
+    @unsubscribe()
 
 exports.getComponent = -> new ListenMouse
