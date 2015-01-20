@@ -30,7 +30,7 @@
     "grunt-contrib-uglify": "~0.6.0",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-contrib-connect": "~0.8.0",
-    "grunt-saucelabs": "^8.2.0",
+    "grunt-saucelabs": "^8.4.1",
     "grunt-noflo-manifest": "^0.1.2",
     "grunt-noflo-browser": "^0.1.1"
   },

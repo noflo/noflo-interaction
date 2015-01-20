@@ -64,11 +64,11 @@ module.exports = ->
           browsers: [
             browserName: 'googlechrome'
             platform: 'OS X 10.8'
-            version: '34'
+            version: '37'
           ,
             browserName: 'safari'
-            platform: 'OS X 10.8'
-            version: '6'
+            platform: 'OS X 10.9'
+            version: '7'
           ,
             browserName: 'internet explorer'
             platform: 'Windows 8.1',
