@@ -23,7 +23,8 @@
     "components/SetHash.coffee",
     "components/ReadCoordinates.coffee",
     "index.js",
-    "components/ReadGamepad.coffee"
+    "components/ReadGamepad.coffee",
+    "components/Focus.coffee"
   ],
   "json": [
     "component.json"
@@ -31,6 +32,7 @@
   "noflo": {
     "icon": "user",
     "components": {
+      "Focus": "components/Focus.coffee",
       "ListenChange": "components/ListenChange.coffee",
       "ListenDrag": "components/ListenDrag.coffee",
       "ListenHash": "components/ListenHash.coffee",
