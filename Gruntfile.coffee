@@ -63,9 +63,7 @@ module.exports = ->
         options:
           urls: ['http://127.0.0.1:9999/spec/runner.html']
           browsers: [
-            browserName: 'googlechrome'
-            platform: 'OS X 10.8'
-            version: '37'
+            browserName: 'chrome'
           ,
             browserName: 'safari'
             platform: 'OS X 10.9'
