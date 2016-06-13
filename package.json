@@ -32,5 +32,24 @@
   "keywords": ["noflo"],
   "scripts": {
     "test": "grunt test"
+  },
+  "noflo": {
+    "components": {
+      "Focus": "components/Focus.coffee",
+      "ListenChange": "components/ListenChange.coffee",
+      "ListenDrag": "components/ListenDrag.coffee",
+      "ListenHash": "components/ListenHash.coffee",
+      "ListenKeyboard": "components/ListenKeyboard.coffee",
+      "ListenKeyboardShortcuts": "components/ListenKeyboardShortcuts.coffee",
+      "ListenMouse": "components/ListenMouse.coffee",
+      "ListenPointer": "components/ListenPointer.coffee",
+      "ListenResize": "components/ListenResize.coffee",
+      "ListenScroll": "components/ListenScroll.coffee",
+      "ListenSpeech": "components/ListenSpeech.coffee",
+      "ListenTouch": "components/ListenTouch.coffee",
+      "ReadCoordinates": "components/ReadCoordinates.coffee",
+      "ReadGamepad": "components/ReadGamepad.coffee",
+      "SetHash": "components/SetHash.coffee"
+    }
   }
 }
