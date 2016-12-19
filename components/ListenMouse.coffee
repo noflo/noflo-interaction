@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenMouse extends noflo.Component
   description: 'Listen to mouse events on a DOM element'
   constructor: ->

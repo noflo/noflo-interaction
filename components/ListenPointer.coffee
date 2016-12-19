@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenPointer extends noflo.Component
   description: 'Listen to pointer events on a DOM element'
   constructor: ->

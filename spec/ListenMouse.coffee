@@ -1,16 +1,22 @@
-listenMouse = require 'noflo-interaction/components/ListenMouse.js'
-socket = require('noflo').internalSocket
+noflo = require 'noflo'
+socket = noflo.internalSocket
+baseDir = 'noflo-interaction'
 
 describe 'ListenMouse component', ->
   c = null
   element = null
   click = null
-  beforeEach ->
-    c = listenMouse.getComponent()
-    element = socket.createSocket()
-    click = socket.createSocket()
-    c.inPorts.element.attach element
-    c.outPorts.click.attach click
+  beforeEach (done) ->
+    @timeout 4000
+    loader = new noflo.ComponentLoader baseDir
+    loader.load 'interaction/ListenMouse', (err, instance) ->
+      return done err if err
+      c = instance
+      element = socket.createSocket()
+      click = socket.createSocket()
+      c.inPorts.element.attach element
+      c.outPorts.click.attach click
+      done()
 
   describe 'on matched element', ->
     el = document.querySelector '#fixtures .listenmouse .target'

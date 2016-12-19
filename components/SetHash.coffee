@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class SetHash extends noflo.Component
   description: 'Set the hash in browser\'s URL bar'
   icon: 'slack'

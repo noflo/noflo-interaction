@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenResize extends noflo.Component
   description: 'Listen to window resize events'
   icon: 'desktop'

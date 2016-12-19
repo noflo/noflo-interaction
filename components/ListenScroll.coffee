@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenScroll extends noflo.Component
   description: 'Listen to scroll events on the browser window'
   icon: 'arrows-v'

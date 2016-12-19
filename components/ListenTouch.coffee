@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenTouch extends noflo.Component
   description: 'Listen to touch events on a DOM element'
   icon: 'hand-o-up'

@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenSpeech extends noflo.Component
   description: 'Listen for user\'s microphone and recognize phrases'
   icon: 'microphone'
