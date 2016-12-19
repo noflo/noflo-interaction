@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenKeyboardShortcuts extends noflo.Component
   description: 'Listen for keyboard shortcuts and route them'
   icon: 'keyboard-o'

@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ReadGamepad extends noflo.Component
   description: 'Read the state of a gamepad'
   icon: 'gamepad'

@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenKeyboard extends noflo.Component
   description: 'Listen for key presses on a given DOM element'
   icon: 'keyboard-o'

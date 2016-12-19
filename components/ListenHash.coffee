@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenHash extends noflo.Component
   description: 'Listen for hash changes in browser\'s URL bar'
   icon: 'slack'

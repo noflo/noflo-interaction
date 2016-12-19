@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ListenDrag extends noflo.Component
   description: 'Listen to drag events on a DOM element'
   icon: 'arrows'

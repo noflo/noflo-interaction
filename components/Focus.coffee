@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class Focus extends noflo.Component
   description: 'focus element'
   element: null

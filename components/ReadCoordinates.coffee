@@ -1,5 +1,7 @@
 noflo = require 'noflo'
 
+# @runtime noflo-browser
+
 class ReadCoordinates extends noflo.Component
   description: 'Read the coordinates from a DOM event'
   constructor: ->

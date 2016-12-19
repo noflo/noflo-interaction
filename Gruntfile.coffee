@@ -8,6 +8,7 @@ module.exports = ->
       update:
         files:
           'component.json': ['graphs/*', 'components/*']
+          'package.json': ['graphs/*', 'components/*']
 
     # CoffeeScript compilation
     coffee:
