@@ -1,5 +1,6 @@
-listenDrag = require 'noflo-interaction/components/ListenDrag.js'
-socket = require('noflo').internalSocket
+noflo = require 'noflo'
+socket = noflo.internalSocket
+baseDir = 'noflo-interaction'
 
 describe 'ListenDrag component', ->
   c = null
@@ -8,18 +9,23 @@ describe 'ListenDrag component', ->
   movex = null
   movey = null
   end = null
-  beforeEach ->
-    c = listenDrag.getComponent()
-    element = socket.createSocket()
-    start = socket.createSocket()
-    movex = socket.createSocket()
-    movey = socket.createSocket()
-    end = socket.createSocket()
-    c.inPorts.element.attach element
-    c.outPorts.start.attach start
-    c.outPorts.movex.attach movex
-    c.outPorts.movey.attach movey
-    c.outPorts.end.attach end
+  beforeEach (done) ->
+    @timeout 4000
+    loader = new noflo.ComponentLoader baseDir
+    loader.load 'interaction/ListenDrag', (err, instance) ->
+      return done err if err
+      c = instance
+      element = socket.createSocket()
+      start = socket.createSocket()
+      movex = socket.createSocket()
+      movey = socket.createSocket()
+      end = socket.createSocket()
+      c.inPorts.element.attach element
+      c.outPorts.start.attach start
+      c.outPorts.movex.attach movex
+      c.outPorts.movey.attach movey
+      c.outPorts.end.attach end
+      done()
 
   describe 'on matched element', ->
     el = document.querySelector '#fixtures .listendrag .target'

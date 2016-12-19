@@ -1,5 +1,6 @@
-listenScroll = require 'noflo-interaction/components/ListenScroll.js'
-socket = require('noflo').internalSocket
+noflo = require 'noflo'
+socket = noflo.internalSocket
+baseDir = 'noflo-interaction'
 
 describe 'ListenScroll component', ->
   c = null
@@ -8,14 +9,19 @@ describe 'ListenScroll component', ->
   left = null
   origTop = window.scrollY
   origLeft = window.scrollX
-  beforeEach ->
-    c = listenScroll.getComponent()
-    start = socket.createSocket()
-    top = socket.createSocket()
-    left = socket.createSocket()
-    c.inPorts.start.attach start
-    c.outPorts.top.attach top
-    c.outPorts.left.attach left
+  beforeEach (done) ->
+    @timeout 4000
+    loader = new noflo.ComponentLoader baseDir
+    loader.load 'interaction/ListenScroll', (err, instance) ->
+      return done err if err
+      c = instance
+      start = socket.createSocket()
+      top = socket.createSocket()
+      left = socket.createSocket()
+      c.inPorts.start.attach start
+      c.outPorts.top.attach top
+      c.outPorts.left.attach left
+      done()
 
   afterEach ->
     window.scrollTo origLeft, origTop

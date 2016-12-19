@@ -1,5 +1,6 @@
-focus = require 'noflo-interaction/components/Focus.js'
-socket = require('noflo').internalSocket
+noflo = require 'noflo'
+socket = noflo.internalSocket
+baseDir = 'noflo-interaction'
 
 describe 'Focus component', ->
   c = null
@@ -7,15 +8,20 @@ describe 'Focus component', ->
   trigger = null
   out = null
 
-  beforeEach ->
-    c = focus.getComponent()
-    element = socket.createSocket()
-    trigger = socket.createSocket()
-    out = socket.createSocket()
+  beforeEach (done) ->
+    @timeout 4000
+    loader = new noflo.ComponentLoader baseDir
+    loader.load 'interaction/Focus', (err, instance) ->
+      return done err if err
+      c = instance
+      element = socket.createSocket()
+      trigger = socket.createSocket()
+      out = socket.createSocket()
 
-    c.inPorts.element.attach element
-    c.inPorts.trigger.attach trigger
-    c.outPorts.out.attach out
+      c.inPorts.element.attach element
+      c.inPorts.trigger.attach trigger
+      c.outPorts.out.attach out
+      done()
 
   describe 'on trigger', ->
     it 'should call focus', (done) ->
