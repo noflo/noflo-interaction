@@ -30,10 +30,10 @@ describe 'ListenScroll component', ->
     it 'should send the new scroll coordinates', (done) ->
       unless window.navigator.userAgent.indexOf('Phantom') is -1
         # Scroll API doesn't seem to work in the PhantomJS test runner
-        return done()
+        return @skip()
       if window.location.href is 'http://127.0.0.1:9999/spec/runner.html'
         # Scroll API doesn't seem to work in the SauceLabs test runner
-        return done()
+        return @skip()
 
       start.send true
       top.once 'data', (data) ->
