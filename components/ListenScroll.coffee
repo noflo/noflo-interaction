@@ -25,7 +25,7 @@ class ListenScroll extends noflo.Component
     window.addEventListener 'scroll', @scroll, false
 
   unsubscribe: ->
-    window.removeEventListenr 'scroll', @scroll, false
+    window.removeEventListener 'scroll', @scroll, false
 
   scroll: (event) =>
     top = window.scrollY
