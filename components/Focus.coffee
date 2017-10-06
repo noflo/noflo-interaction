@@ -2,30 +2,24 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class Focus extends noflo.Component
-  description: 'focus element'
-  element: null
-  constructor: ->
-    super
-
-    @inPorts.add 'element',
-      datatype: 'all'
-      description: 'element to be focused'
-    , (event, payload) =>
-      if event is 'data'
-        @element = payload
-
-    @inPorts.add 'trigger',
-      datatype: 'bang'
-      description: 'trigger focus'
-    , (event, payload) =>
-      if event is 'data'
-        window.setTimeout =>
-          @element.focus()
-          @outPorts.out.send payload
-        , 0
-
-    @outPorts.add 'out'
-
-exports.getComponent = -> new Focus
-
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'focus element'
+  c.inPorts.add 'element',
+    datatype: 'object'
+    description: 'element to be focused'
+    control: true
+  c.inPorts.add 'trigger',
+    datatype: 'bang'
+    description: 'trigger focus'
+  c.outPorts.add 'out',
+    datatype: 'bang'
+  c.process (input, output) ->
+    return unless input.hasData 'element', 'trigger'
+    element = input.getData 'element'
+    input.getData 'trigger'
+    window.setTimeout ->
+      element.focus()
+      output.sendDone
+        out: true
+    , 0

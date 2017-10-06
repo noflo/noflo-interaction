@@ -2,82 +2,65 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenTouch extends noflo.Component
-  description: 'Listen to touch events on a DOM element'
-  icon: 'hand-o-up'
-  constructor: ->
-    @elements = []
-    @inPorts =
-      element: new noflo.Port 'object'
-    @outPorts =
-      start: new noflo.ArrayPort 'object'
-      movex: new noflo.ArrayPort 'number'
-      movey: new noflo.ArrayPort 'number'
-      end: new noflo.ArrayPort 'object'
-
-    @inPorts.element.on 'data', (element) =>
-      @subscribe element
-
-  subscribe: (element) ->
-    element.addEventListener 'touchstart', @touchstart, false
-    element.addEventListener 'touchmove', @touchmove, false
-    element.addEventListener 'touchend', @touchend, false
-    @elements.push element
-
-  unsubscribe: ->
-    for element in @elements
-      element.removeEventListener 'touchstart', @touchstart, false
-      element.removeEventListener 'touchmove', @touchmove, false
-      element.removeEventListener 'touchend', @touchend, false
-    @elements = []
-
-  touchstart: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-
-    return unless event.changedTouches
-    return unless event.changedTouches.length
-
-    for touch, idx in event.changedTouches
-      @outPorts.start.beginGroup idx
-      @outPorts.start.send event
-      @outPorts.start.endGroup()
-
-    @outPorts.start.disconnect()
-
-  touchmove: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-
-    return unless event.changedTouches
-    return unless event.changedTouches.length
-
-    for touch, idx in event.changedTouches
-      @outPorts.movex.beginGroup idx
-      @outPorts.movex.send touch.pageX
-      @outPorts.movex.endGroup()
-      @outPorts.movey.beginGroup idx
-      @outPorts.movey.send touch.pageY
-      @outPorts.movey.endGroup()
-
-  touchend: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-
-    return unless event.changedTouches
-    return unless event.changedTouches.length
-
-    @outPorts.movex.disconnect() if @outPorts.movex.isConnected()
-    @outPorts.movey.disconnect() if @outPorts.movey.isConnected()
-
-    for touch, idx in event.changedTouches
-      @outPorts.end.beginGroup idx
-      @outPorts.end.send event
-      @outPorts.end.endGroup()
-
-    @outPorts.end.disconnect()
-
-  shutdown: ->
-    @unsubscribe()
-
-exports.getComponent = -> new ListenTouch
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Listen to touch events on a DOM element'
+  c.icon = 'hand-o-up'
+  c.inPorts.add 'element',
+    datatype: 'object'
+  c.outPorts.add 'start',
+    datatype: 'object'
+  c.outPorts.add 'movex',
+    datatype: 'number'
+  c.outPorts.add 'movey',
+    datatype: 'number'
+  c.outPorts.add 'end',
+    datatype: 'object'
+  c.elements = []
+  c.tearDown = (callback) ->
+    for element in elements
+      element.el.removeEventListener 'touchstart', element.touchstart, false
+      element.el.removeEventListener 'touchmove', element.touchmove, false
+      element.el.removeEventListener 'touchend', element.touchend, false
+      element.ctx.deactivate()
+    c.elements = []
+    do callback
+  c.process (input, output, context) ->
+    return unless input.hasData 'element'
+    data =
+      el: input.getData 'element'
+      touchstart: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        return unless event.changedTouches
+        return unless event.changedTouches.length
+        for touch, idx in event.changedTouches
+          output.send
+            start: new noflo.IP 'data', event,
+              touch: idx
+      touchmove: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        return unless event.changedTouches
+        return unless event.changedTouches.length
+        for touch, idx in event.changedTouches
+          output.send
+            movex: new noflo.IP 'data', touch.pageX,
+              touch: idx
+            movey: new noflo.IP 'data', touch.pageY,
+              touch: idx
+      touchend: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        return unless event.changedTouches
+        return unless event.changedTouches.length
+        for touch, idx in event.changedTouches
+          output.send
+            end: new noflo.IP 'data', event,
+              touch: idx
+      ctx: context
+    data.el.addEventListener 'touchstart', data.touchstart, false
+    data.el.addEventListener 'touchmove', data.touchmove, false
+    data.el.addEventListener 'touchend', data.touchend, false
+    c.elements.push data
+    return

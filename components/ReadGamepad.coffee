@@ -2,42 +2,33 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ReadGamepad extends noflo.Component
-  description: 'Read the state of a gamepad'
-  icon: 'gamepad'
-  constructor: ->
-    @lastTimestamp
-    @inPorts =
-      gamepad: new noflo.Port 'int'
-    @outPorts =
-      out: new noflo.Port 'object'
-      error: new noflo.Port 'string'
-
-    @inPorts.gamepad.on 'data', (number) =>
-      @readGamepad number
-
-  readGamepad: (number) ->
-    if !navigator.webkitGetGamepads
-      msg = "no webkit gamepad api available"
-      if @outPorts.error.isAttached()
-        @outPorts.error.send msg
-        @outPorts.error.disconnect()
-        return
-      else
-        throw new Error msg
-
-    gamepadState = navigator.webkitGetGamepads()[number]
-    if !gamepadState
-      msg = "state for gamepad '#{number}' could not been read"
-      if @outPorts.error.isAttached()
-        @outPorts.error.send msg
-        @outPorts.error.disconnect()
-        return
-      else
-        throw new Error msg
-
-    if @lastTimestamp != gamepadState.timestamp
-      @lastTimestamp = gamepadState.timestamp
-      @outPorts.out.send gamepadState
-
-exports.getComponent = -> new ReadGamepad
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Read the state of a gamepad'
+  c.icon = 'gamepad'
+  c.inports.add 'gamepad',
+    datatype: 'integer'
+  c.outPorts.add 'out',
+    datatype: 'object'
+  c.outPorts.add 'error',
+    datatype: 'object'
+  c.lastTimestamps = {}
+  c.tearDown = (callback) ->
+    c.lastTimestamps = {}
+    do callback
+  c.process (input, output) ->
+    return unless input.hasData 'gamepad'
+    gamepad = input.getData 'gamepad'
+    unless navigator.webkitGetGamepads
+      output.done new Error "No WebKit Gamepad API available"
+      return
+    gamepadState = navigator.webkitGetGamepads()[gamepad]
+    unless gamepadState
+      output.done new Error "Gamepad '#{gamepad}' not available"
+    if c.lastTimestamps[gamepad] = gamepadState.timestamp
+      # No change
+      output.done()
+      return
+    c.lastTimestamps[gamepad] = gamepadState.timestamp
+    output.sendDone
+      out: gamepadState

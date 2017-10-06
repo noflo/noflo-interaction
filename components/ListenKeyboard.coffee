@@ -2,41 +2,41 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenKeyboard extends noflo.Component
-  description: 'Listen for key presses on a given DOM element'
-  icon: 'keyboard-o'
-  constructor: ->
-    @elements = []
-    @inPorts =
-      element: new noflo.Port 'object'
-      stop: new noflo.Port 'object'
-    @outPorts =
-      keypress: new noflo.Port 'int'
-
-    @inPorts.element.on 'data', (element) =>
-      @subscribe element
-
-    @inPorts.stop.on 'data', (element) =>
-      @unsubscribe element
-
-  subscribe: (element) ->
-    element.addEventListener 'keypress', @keypress, false
-    @elements.push element
-
-  unsubscribe: (element) ->
-    if -1 is @elements.indexOf element
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Listen for key presses on a given DOM element'
+  c.icon = 'keyboard-o'
+  c.inPorts.add 'element',
+    datatype: 'object'
+  c.inPorts.add 'stop',
+    datatype: 'object'
+  c.outPorts.add 'keypress',
+    datatype: 'integer'
+  c.elements = []
+  unsubcribe = (element) ->
+    element.el.removeEventListener 'keypress', element.listener, false
+    element.ctx.deactivate()
+  c.tearDown = (callback) ->
+    unsubscribe element for element in elements
+    c.elements = []
+    do callback
+  c.process (input, output, context) ->
+    if input.hasData 'element'
+      data =
+        el: input.getData 'element'
+        listener: (event) ->
+          output.send
+            keypress: event.keyCode
+        ctx: context
+      data.el.addEventListener 'keypress', data.listener, false
+      c.elements.push data
       return
-    element.removeEventListener 'keypress', @keypress, false
-    @elements.splice @elements.indexOf(element), 1
-
-  keypress: (event) =>
-    return unless @outPorts.keypress.isAttached()
-
-    @outPorts.keypress.send event.keyCode
-    @outPorts.keypress.disconnect()
-
-  shutdown: ->
-    for element in @elements
-      @unsubscribe element
-
-exports.getComponent = -> new ListenKeyboard
+    if input.hasData 'stop'
+      element = input.getData 'stop'
+      ctx = null
+      for el in c.elements
+        continue unless el.el is element
+        ctx = el
+      return unless ctx
+      unsubscribe ctx
+      output.done()
