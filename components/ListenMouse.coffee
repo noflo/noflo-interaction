@@ -2,59 +2,39 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenMouse extends noflo.Component
-  description: 'Listen to mouse events on a DOM element'
-  constructor: ->
-    @elements = []
-    @inPorts =
-      element: new noflo.Port 'object'
-    @outPorts =
-      click: new noflo.ArrayPort 'object'
-      dblclick: new noflo.ArrayPort 'object'
-
-    @inPorts.element.on 'data', (element) =>
-      @subscribe element
-
-  subscribe: (element) ->
-    element.addEventListener 'click', @click, false
-    element.addEventListener 'dblclick', @dblclick, false
-    @elements.push element
-
-  unsubscribe: ->
-    for element in @elements
-      element.removeEventListener 'click', @click, false
-      element.removeEventListener 'dblclick', @dblclick, false
-    @elements = []
-
-  click: (event) =>
-    return unless @outPorts.click.sockets.length
-    event.preventDefault()
-    event.stopPropagation()
-
-    @outPorts.click.send event
-    @outPorts.click.disconnect()
-    do @updateIcon
-
-  dblclick: (event) =>
-    return unless @outPorts.dblclick.sockets.length
-    event.preventDefault()
-    event.stopPropagation()
-
-    @outPorts.dblclick.send event
-    @outPorts.dblclick.disconnect()
-    do @updateIcon
-
-  updateIcon: ->
-    return unless @setIcon
-    return if @timeout
-    @originalIcon = @getIcon()
-    @setIcon 'exclamation-circle'
-    @timeout = setTimeout =>
-      @setIcon @originalIcon
-      @timeout = null
-    , 200
-
-  shutdown: ->
-    @unsubscribe()
-
-exports.getComponent = -> new ListenMouse
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Listen to mouse events on a DOM element'
+  c.inPorts.add 'element',
+    datatype: 'object'
+  c.outPorts.add 'click',
+    datatype: 'object'
+  c.outPorts.add 'dblclick',
+    datatype: 'object'
+  c.elements = []
+  c.tearDown = (callback) ->
+    for element in elements
+      element.el.removeEventListener 'click', element.click, false
+      element.el.removeEventListener 'dblclick', element.dblclick, false
+      element.ctx.deactivate()
+    c.elements = []
+    do callback
+  c.process (input, output, context) ->
+    return unless input.hasData 'element'
+    data =
+      el: input.getData 'element'
+      click: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        output.send
+          click: event
+      dblclick: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        output.send
+          dblclick: event
+      ctx: context
+    data.el.addEventListener 'click', data.click, false
+    data.el.addEventListener 'dblclick', data.dblclick, false
+    c.elements.push data
+    return

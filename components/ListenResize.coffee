@@ -2,39 +2,47 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenResize extends noflo.Component
-  description: 'Listen to window resize events'
-  icon: 'desktop'
-
-  constructor: ->
-    @inPorts =
-      start: new noflo.Port 'bang'
-      stop: new noflo.Port 'bang'
-    @outPorts =
-      width: new noflo.Port 'number'
-      height: new noflo.Port 'number'
-
-    @inPorts.start.on 'data', =>
-      @sendSize()
-      @subscribe()
-
-    @inPorts.stop.on 'data', =>
-      @unsubscribe()
-
-  subscribe: ->
-    window.addEventListener 'resize', @sendSize, false
-  unsubscribe: ->
-    window.removeEventListener 'resize', @sendSize, false
-
-  sendSize: =>
-    if @outPorts.width.isAttached()
-      @outPorts.width.send window.innerWidth
-      @outPorts.width.disconnect()
-    if @outPorts.height.isAttached()
-      @outPorts.height.send window.innerHeight
-      @outPorts.height.disconnect()
-
-  shutdown: ->
-    @unsubscribe()
-
-exports.getComponent = -> new ListenResize
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Listen to window resize events'
+  c.icon = 'desktop'
+  c.inPorts.add 'start',
+    datatype: 'bang'
+    description: 'Start listening for screen resizes'
+  c.inPorts.add 'stop',
+    datatype: 'bang'
+    description: 'Stop listening for screen resizes'
+  c.outPorts.add 'width',
+    datatype: 'number'
+  c.outPorts.add 'height',
+    datatype: 'number'
+  c.subscriber = null
+  unsubscribe = ->
+    return unless c.subscriber
+    window.removeEventListener 'resize', c.subscriber.callback, false
+    c.subscriber.ctx.deactivate()
+    c.subscriber = null
+  c.tearDown = (callback) ->
+    do unsubscribe
+    do callback
+  c.process (input, output, context) ->
+    if input.hasData 'start'
+      input.getData 'start'
+      # Ensure previous subscription is ended
+      do unsubscribe
+      c.subscriber =
+        callback: (event) ->
+          output.send
+            width: window.innerWidth
+            height: window.innerHeight
+        ctx: context
+      output.send
+        width: window.innerWidth
+        height: window.innerHeight
+      window.addEventListener 'resize', c.subscriber.callback, false
+      return
+    if input.hasData 'stop'
+      input.getData 'stop'
+      do unsubscribe
+      output.done()
+      return

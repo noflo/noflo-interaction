@@ -2,47 +2,52 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenDrag extends noflo.Component
-  description: 'Listen to drag events on a DOM element'
-  icon: 'arrows'
-  constructor: ->
-    @inPorts =
-      element: new noflo.Port 'object'
-    @outPorts =
-      start: new noflo.ArrayPort 'object'
-      movex: new noflo.ArrayPort 'number'
-      movey: new noflo.ArrayPort 'number'
-      end: new noflo.ArrayPort 'object'
-
-    @inPorts.element.on 'data', (element) =>
-      @subscribe element
-
-  subscribe: (element) ->
-    element.addEventListener 'dragstart', @dragstart, false
-    element.addEventListener 'drag', @dragmove, false
-    element.addEventListener 'dragend', @dragend, false
-
-  dragstart: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-
-    @outPorts.start.send event
-    @outPorts.start.disconnect()
-
-  dragmove: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-    @outPorts.movex.send event.clientX
-    @outPorts.movey.send event.clientY
-
-  dragend: (event) =>
-    event.preventDefault()
-    event.stopPropagation()
-
-    @outPorts.movex.disconnect() if @outPorts.movex.isConnected()
-    @outPorts.movey.disconnect() if @outPorts.movey.isConnected()
-
-    @outPorts.end.send event
-    @outPorts.end.disconnect()
-
-exports.getComponent = -> new ListenDrag
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description =  'Listen to drag events on a DOM element'
+  c.icon = 'arrows'
+  c.inPorts.add 'element',
+    datatype: 'object'
+  c.outPorts.add 'start',
+    datatype: 'object'
+  c.outPorts.add 'movey',
+    datatype: 'number'
+  c.outPorts.add 'movex',
+    datatype: 'number'
+  c.outPorts.add 'end',
+    datatype: 'object'
+  c.elements = []
+  c.tearDown = (callback) ->
+    for element in elements
+      element.el.removeEventListener 'dragstart', element.dragstart, false
+      element.el.removeEventListener 'drag', element.dragmove, false
+      element.el.removeEventListener 'dragend', element.dragend, false
+      element.ctx.deactivate()
+    c.elements = []
+    do callback
+  c.process (input, output, context) ->
+    return unless input.hasData 'element'
+    data =
+      el: input.getData 'element'
+      dragstart: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        output.send
+          start: event
+      dragmove: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        output.send
+          movex: event.clientX
+          movey: event.clientY
+      dragend: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+        output.send
+          end: event
+      ctx: context
+    data.el.addEventListener 'dragstart', data.dragstart, false
+    data.el.addEventListener 'drag', data.dragmove, false
+    data.el.addEventListener 'dragend', data.dragend, false
+    c.elements.push data
+    return

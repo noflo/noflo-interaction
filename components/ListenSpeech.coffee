@@ -2,57 +2,59 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ListenSpeech extends noflo.Component
-  description: 'Listen for user\'s microphone and recognize phrases'
-  icon: 'microphone'
-  constructor: ->
-    @recognition = false
-    @sent = []
-    @inPorts =
-      start: new noflo.Port 'bang'
-      stop: new noflo.Port 'bang'
-    @outPorts =
-      result: new noflo.Port 'string'
-      error: new noflo.Port 'object'
-
-    @inPorts.start.on 'data', =>
-      @startListening()
-    @inPorts.stop.on 'data', =>
-      @stopListening()
-
-  startListening: ->
-    unless window.webkitSpeechRecognition
-      @handleError new Error 'Speech recognition support not available'
-    @recognition = new window.webkitSpeechRecognition
-    @recognition.continuous = true
-    @recognition.start()
-    @outPorts.result.connect()
-    @recognition.onresult = @handleResult
-    @recognition.onerror = @handleError
-
-  handleResult: (event) =>
-    for result, idx in event.results
-      continue unless result.isFinal
-      if @sent.indexOf(idx) isnt -1
-        continue
-      @outPorts.result.send result[0].transcript
-      @sent.push idx
-
-  handleError: (error) =>
-    if @outPorts.error.isAttached()
-      @outPorts.error.send error
-      @outPorts.error.disconnect()
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Listen for user\'s microphone and recognize phrases'
+  c.icon = 'microphone'
+  c.inPorts.add 'start',
+    datatype: 'bang'
+    description: 'Start listening for hash changes'
+  c.inPorts.add 'stop',
+    datatype: 'bang'
+    description: 'Stop listening for hash changes'
+  c.outPorts.add 'result',
+    datatype: 'string'
+  c.outPorts.add 'error',
+    datatype: 'object'
+  c.subscriber = null
+  unsubscribe = ->
+    return unless c.subscriber
+    do c.subscriber.recognition.stop
+    do c.subscriber.ctx.deactivate
+    c.subscriber = null
+  c.tearDown = (callback) ->
+    do unsubscribe
+    do callback
+  c.process (input, output, context) ->
+    if input.hasData 'start'
+      input.getData 'start'
+      # Ensure previous subscription is ended
+      do unsubscribe
+      unless window.webkitSpeechRecognition
+        output.done new Error 'Speech recognition support not available'
+        return
+      c.subscriber =
+        sent: []
+        callback: (event) ->
+          for result, idx in event.results
+            continue unless result.isFinal
+            if c.subscriber.sent.indexOf(idx) isnt -1
+              continue
+            output.send
+              result: result[0].transcript
+            c.subscriber.sent.push idx
+        error: (err) ->
+          output.send
+            error: err
+        ctx: context
+      c.subscriber.recognition = new window.webkitSpeechRecognition
+      c.subscriber.recognition.continuous = true
+      c.subscriber.recognition.start()
+      c.subscriber.recognition.onresult = c.subscriber.callback
+      c.subscriber.recognition.onerror = c.subscriber.error
       return
-    throw error
-
-  stopListening: ->
-    return unless @recognition
-    @outPorts.result.disconnect()
-    @recognition.stop()
-    @recognition = null
-    @sent = []
-
-  shutdown: ->
-    @stopListening()
-
-exports.getComponent = -> new ListenSpeech
+    if input.hasData 'stop'
+      input.getData 'stop'
+      do unsubscribe
+      output.done()
+      return

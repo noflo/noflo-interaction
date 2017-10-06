@@ -2,44 +2,29 @@ noflo = require 'noflo'
 
 # @runtime noflo-browser
 
-class ReadCoordinates extends noflo.Component
-  description: 'Read the coordinates from a DOM event'
-  constructor: ->
-    @inPorts =
-      event: new noflo.Port 'object'
-    @outPorts =
-      screen: new noflo.Port 'object'
-      client: new noflo.Port 'object'
-      page: new noflo.Port 'object'
-
-    @inPorts.event.on 'begingroup', (group) =>
-      @outPorts.screen.beginGroup group if @outPorts.screen.isAttached()
-      @outPorts.client.beginGroup group if @outPorts.client.isAttached()
-      @outPorts.page.beginGroup group if @outPorts.page.isAttached()
-    @inPorts.event.on 'data', (data) =>
-      @read data
-    @inPorts.event.on 'endgroup', =>
-      @outPorts.screen.endGroup() if @outPorts.screen.isAttached()
-      @outPorts.client.endGroup() if @outPorts.client.isAttached()
-      @outPorts.page.endGroup() if @outPorts.page.isAttached()
-    @inPorts.event.on 'disconnect', =>
-      @outPorts.screen.disconnect() if @outPorts.screen.isAttached()
-      @outPorts.client.disconnect() if @outPorts.client.isAttached()
-      @outPorts.page.disconnect() if @outPorts.page.isAttached()
-
-  read: (event) ->
-    return unless event
-    if @outPorts.screen.isAttached() and event.screenX isnt undefined
-      @outPorts.screen.send
+exports.getComponent = ->
+  c = new noflo.Component
+  c.description = 'Read the coordinates from a DOM event'
+  c.inPorts.add 'event',
+    datatype: 'object'
+  c.outPorts.add 'screen',
+    datatype: 'object'
+  c.outPorts.add 'client',
+    datatype: 'object'
+  c.outPorts.add 'page',
+    datatype: 'object'
+  c.forwardBrackets =
+    event: ['screen', 'client', 'page']
+  c.process (input, output) ->
+    return unless input.hasData 'event'
+    event = input.getData 'event'
+    output.sendDone
+      screen:
         x: event.screenX
         y: event.screenY
-    if @outPorts.client.isAttached() and event.clientX isnt undefined
-      @outPorts.client.send
+      client:
         x: event.clientX
         y: event.clientY
-    if @outPorts.page.isAttached() and event.pageX isnt undefined
-      @outPorts.page.send
+      page:
         x: event.pageX
         y: event.pageY
-
-exports.getComponent = -> new ReadCoordinates
