@@ -6,7 +6,7 @@ exports.getComponent = ->
   c = new noflo.Component
   c.description = 'Read the state of a gamepad'
   c.icon = 'gamepad'
-  c.inports.add 'gamepad',
+  c.inPorts.add 'gamepad',
     datatype: 'integer'
   c.outPorts.add 'out',
     datatype: 'object'
