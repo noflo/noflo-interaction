@@ -32,19 +32,24 @@ exports.getComponent = ->
       input.getData 'start'
       # Ensure previous subscription is ended
       do unsubscribe
+      sendHash = (port) ->
+        oldHash = c.current
+        c.current = window.location.href.split('#')[1] or ''
+        if oldHash
+          output.send
+            change: new noflo.IP 'openBracket', oldHash
+        payload = {}
+        payload[port] = c.current
+        output.send payload
+        if oldHash
+          output.send
+            change: new noflo.IP 'closeBracket', oldHash
       c.subscriber =
         callback: (event) ->
-          oldHash = c.current
-          c.current = window.location.href.split('#')[1] or ''
-          if oldHash
-            output.send
-              change: new noflo.IP 'openBracket', oldHash
-          output.send
-            change: c.current
-          if oldHash
-            output.send
-              change: new noflo.IP 'closeBracket', oldHash
+          sendHash 'change'
         ctx: context
+      # Send initial
+      sendHash 'initial'
       window.addEventListener 'hashchange', c.subscriber.callback, false
       return
     if input.hasData 'stop'
