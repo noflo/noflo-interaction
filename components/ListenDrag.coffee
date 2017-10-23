@@ -31,7 +31,6 @@ exports.getComponent = ->
     data =
       el: input.getData 'element'
       dragstart: (event) ->
-        event.preventDefault()
         event.stopPropagation()
         output.send
           start: event
