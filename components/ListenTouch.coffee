@@ -25,6 +25,7 @@ exports.getComponent = ->
       element.ctx.deactivate()
     c.elements = []
     do callback
+  c.forwardBrackets = {}
   c.process (input, output, context) ->
     return unless input.hasData 'element'
     data =

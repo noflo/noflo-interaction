@@ -28,6 +28,7 @@ exports.getComponent = ->
   c.tearDown = (callback) ->
     do unsubscribe
     do callback
+  c.forwardBrackets = {}
   c.process (input, output, context) ->
     if input.hasData 'keys'
       keys = input.getData 'keys'

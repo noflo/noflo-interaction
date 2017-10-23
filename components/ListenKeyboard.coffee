@@ -20,6 +20,7 @@ exports.getComponent = ->
     unsubscribe element for element in elements
     c.elements = []
     do callback
+  c.forwardBrackets = {}
   c.process (input, output, context) ->
     if input.hasData 'element'
       data =
