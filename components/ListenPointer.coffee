@@ -5,6 +5,7 @@ noflo = require 'noflo'
 exports.getComponent = ->
   c = new noflo.Component
   c.description = 'Listen to pointer events on a DOM element'
+  c.icon = 'pencil-square-o'
   c.inPorts.add 'element',
     datatype: 'object'
   c.inPorts.add 'action',

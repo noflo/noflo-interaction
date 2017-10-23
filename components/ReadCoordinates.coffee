@@ -5,6 +5,7 @@ noflo = require 'noflo'
 exports.getComponent = ->
   c = new noflo.Component
   c.description = 'Read the coordinates from a DOM event'
+  c.icon = 'map-marker'
   c.inPorts.add 'event',
     datatype: 'object'
   c.outPorts.add 'screen',

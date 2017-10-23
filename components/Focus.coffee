@@ -4,6 +4,7 @@ noflo = require 'noflo'
 
 exports.getComponent = ->
   c = new noflo.Component
+  c.icon = 'i-cursor'
   c.description = 'focus element'
   c.inPorts.add 'element',
     datatype: 'object'

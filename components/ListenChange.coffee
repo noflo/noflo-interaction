@@ -4,7 +4,8 @@ noflo = require 'noflo'
 
 exports.getComponent = ->
   c = new noflo.Component
-  c.description = 'Listen to mouse events on a DOM element'
+  c.description = 'Listen to changes on an input element'
+  c.icon = 'hourglass'
   c.inPorts.add 'element',
     datatype: 'object'
   c.outPorts.add 'value',
