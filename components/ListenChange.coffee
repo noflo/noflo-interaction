@@ -11,7 +11,7 @@ exports.getComponent = ->
     datatype: 'object'
   c.elements = []
   c.tearDown = (callback) ->
-    for element in elements
+    for element in c.elements
       element.el.removeEventListener 'change', element.listener, false
       element.ctx.deactivate()
     c.elements = []

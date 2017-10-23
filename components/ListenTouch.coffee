@@ -18,7 +18,7 @@ exports.getComponent = ->
     datatype: 'object'
   c.elements = []
   c.tearDown = (callback) ->
-    for element in elements
+    for element in c.elements
       element.el.removeEventListener 'touchstart', element.touchstart, false
       element.el.removeEventListener 'touchmove', element.touchmove, false
       element.el.removeEventListener 'touchend', element.touchend, false

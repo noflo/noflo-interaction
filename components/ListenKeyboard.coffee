@@ -17,7 +17,7 @@ exports.getComponent = ->
     element.el.removeEventListener 'keypress', element.listener, false
     element.ctx.deactivate()
   c.tearDown = (callback) ->
-    unsubscribe element for element in elements
+    unsubscribe element for element in c.elements
     c.elements = []
     do callback
   c.forwardBrackets = {}

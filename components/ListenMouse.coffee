@@ -4,6 +4,7 @@ noflo = require 'noflo'
 
 exports.getComponent = ->
   c = new noflo.Component
+  c.icon = 'mouse-pointer'
   c.description = 'Listen to mouse events on a DOM element'
   c.inPorts.add 'element',
     datatype: 'object'
@@ -13,7 +14,7 @@ exports.getComponent = ->
     datatype: 'object'
   c.elements = []
   c.tearDown = (callback) ->
-    for element in elements
+    for element in c.elements
       element.el.removeEventListener 'click', element.click, false
       element.el.removeEventListener 'dblclick', element.dblclick, false
       element.ctx.deactivate()

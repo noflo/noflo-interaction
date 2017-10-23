@@ -27,7 +27,7 @@ exports.getComponent = ->
       description: "Sends event on pointer#{event}"
   c.elements = []
   c.tearDown = (callback) ->
-    for element in elements
+    for element in c.elements
       if element.el.removeAttribute
         element.el.removeAttribute 'touch-action'
       for event in events
