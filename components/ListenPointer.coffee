@@ -43,7 +43,7 @@ exports.getComponent = ->
     data =
       el: input.getData 'element'
       ctx: context
-    element.el.setAttribute 'touch-action', action
+    data.el.setAttribute 'touch-action', action
     events.forEach (event) ->
       data["pointer#{event}"] = (ev) ->
         ev.preventDefault()
