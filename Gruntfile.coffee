@@ -20,14 +20,6 @@ module.exports = ->
         files:
           'browser/noflo-interaction.js': ['package.json']
 
-    # JavaScript minification for the browser
-    uglify:
-      options:
-        report: 'min'
-      noflo:
-        files:
-          './browser/noflo-interaction.min.js': ['./browser/noflo-interaction.js']
-
     # Automated recompilation and testing when developing
     watch:
       files: ['spec/*.coffee', 'components/*.coffee']
@@ -81,7 +73,6 @@ module.exports = ->
   # Grunt plugins used for building
   @loadNpmTasks 'grunt-noflo-browser'
   @loadNpmTasks 'grunt-contrib-coffee'
-  @loadNpmTasks 'grunt-contrib-uglify'
 
   # Grunt plugins used for testing
   @loadNpmTasks 'grunt-contrib-watch'
@@ -96,13 +87,12 @@ module.exports = ->
   @registerTask 'build', 'Build NoFlo for the chosen target platform', (target = 'all') =>
     if target is 'all' or target is 'browser'
       @task.run 'noflo_browser'
-      @task.run 'uglify'
 
   @registerTask 'test', 'Build NoFlo and run automated tests', (target = 'all') =>
     @task.run 'coffeelint'
     @task.run 'coffee'
+    @task.run 'build'
     if target is 'all' or target is 'browser'
-      @task.run 'noflo_browser'
       @task.run 'mocha_phantomjs'
 
   @registerTask 'crossbrowser', 'Run tests on real browsers', ['test', 'connect', 'saucelabs-mocha']
